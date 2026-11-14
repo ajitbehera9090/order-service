@@ -1,5 +1,9 @@
 version: 0.2
 
+env:
+  variables:
+    ImageName: order-service
+
 phases:
   pre_build:
     commands:
@@ -7,10 +11,12 @@ phases:
 
   build:
     commands:
-      - mvn clean package
-      - docker build -t order-service .
+      - echo "Building Maven project"
+      - ./mvnw clean package -DskipTests
+      - ls -la target
+      - docker build -t $ImageName .
 
   post_build:
     commands:
-      - docker tag order-service:latest 828776174978.dkr.ecr.ap-southeast-2.amazonaws.com/order-service:latest
-      - docker push 828776174978.dkr.ecr.ap-southeast-2.amazonaws.com/order-service:latest
+      - docker tag $ImageName:latest 828776174978.dkr.ecr.ap-southeast-2.amazonaws.com/$ImageName:latest
+      - docker push 828776174978.dkr.ecr.ap-southeast-2.amazonaws.com/$ImageName:latest
