@@ -1,24 +1,16 @@
 version: 0.2
 
 phases:
-  install:
-    commands:
-      - echo Installing dependencies
-
   pre_build:
     commands:
-      - echo Entered pre_build phase
+      - aws ecr get-login-password --region ap-southeast-2 | docker login --username AWS --password-stdin 828776174978.dkr.ecr.ap-southeast-2.amazonaws.com
 
   build:
     commands:
-      - echo Entered build phase
       - mvn clean package
+      - docker build -t $ImageName .
 
   post_build:
     commands:
-      - echo Entered post_build phase
-
-artifacts:
-  files:
-    - target/order-service.jar
-  discard-paths: yes
+      - docker tag $ImageName:latest 828776174978.dkr.ecr.ap-southeast-2.amazonaws.com/$ImageName:latest
+      - docker push 828776174978.dkr.ecr.ap-southeast-2.amazonaws.com/$ImageName:latest
