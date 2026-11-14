@@ -8,9 +8,9 @@ phases:
   build:
     commands:
       - mvn clean package
-      - docker build -t $ImageName .
+      - docker build -t order-service .
 
   post_build:
     commands:
-      - docker tag $ImageName:latest 828776174978.dkr.ecr.ap-southeast-2.amazonaws.com/$ImageName:latest
-      - docker push 828776174978.dkr.ecr.ap-southeast-2.amazonaws.com/$ImageName:latest
+      - docker tag order-service:latest 828776174978.dkr.ecr.ap-southeast-2.amazonaws.com/order-service:latest
+      - docker push 828776174978.dkr.ecr.ap-southeast-2.amazonaws.com/order-service:latest
